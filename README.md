@@ -1,5 +1,12 @@
 # Protocol specification
 
+Every message consists of a single command identifier (uppercase, with dashes,
+`-`) and zero or more arguments. All separated by spaces. An example message is:
+
+```
+START 4 50
+```
+
 ## Screen
 
 ### Establishing a connection
