@@ -1,0 +1,11 @@
+{
+  "name": "binair-bier-drinken-ws",
+  "version": "1.0.0",
+  "description": "Websocket to facilitate binair bier drinken remote",
+  "main": "src/index.js",
+  "author": "GEPWNAGE",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
