@@ -6,7 +6,8 @@
   "author": "GEPWNAGE",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0"
   },
   "scripts": {
     "start": "node src/index.js"
