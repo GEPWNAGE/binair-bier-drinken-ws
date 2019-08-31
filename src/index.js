@@ -31,16 +31,30 @@ app.ws('/remote', (ws, req) => {
         const command = msg.split(' ');
         console.log("Remote", command);
 
+        // check if connection with screen still works
+        if (ident !== null && screens[ident].readyState > 1) {
+            // disconnected
+            ws.send("QUIT");
+            return;
+        }
+
         switch (command[0]) {
             case 'IDENT':
                 if (command.length < 2) {
                     ws.send('IDENT-FAIL');
                     ws.terminate();
+                    return;
                 }
                 ident = command[1];
-                if (screens[ident] === undefined) {
+                if (!(ident in screens)) {
                     ws.send('IDENT-FAIL');
                     ws.terminate();
+                    return;
+                }
+                if (screens[ident].readyState != 1) {
+                    ws.send('IDENT-FAIL');
+                    ws.terminate();
+                    return;
                 }
 
                 screens[ident].send('REMOTE-CONNECTED');
@@ -67,7 +81,9 @@ app.ws('/screen', (ws, req) => {
                 ws.send("IDENT " + ident);
                 break;
             case 'FINISHED':
-                remotes[ident].send(msg);
+                if (ident in remotes && remotes[ident].readyState == 1) {
+                    remotes[ident].send(msg);
+                }
                 break;
         }
     });
