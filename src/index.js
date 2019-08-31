@@ -1,5 +1,7 @@
 const express = require('express');
+require('dotenv').config();
 const app = express();
+const proxy = require('express-http-proxy');
 require('express-ws')(app);
 
 /**
@@ -88,5 +90,9 @@ app.ws('/screen', (ws, req) => {
         }
     });
 });
+
+if (process.env.APP_ENV === 'development') {
+    app.use('/', proxy('localhost:3000'));
+}
 
 app.listen(5000, () => console.log("Listening..."));
