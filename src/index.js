@@ -96,6 +96,8 @@ if (process.env.APP_ENV === 'development') {
 }
 if (process.env.APP_ENV === 'production') {
     app.use('/', express.static(process.env.APP_DIR));
+
+    app.get('/remote/:handle', (req, res) => res.sendFile(process.env.APP_DIR + "/index.html"));
 }
 
 app.listen(5000, () => console.log("Listening..."));
