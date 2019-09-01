@@ -94,5 +94,8 @@ app.ws('/screen', (ws, req) => {
 if (process.env.APP_ENV === 'development') {
     app.use('/', proxy('localhost:3000'));
 }
+if (process.env.APP_ENV === 'production') {
+    app.use('/', express.static(process.env.APP_DIR));
+}
 
 app.listen(5000, () => console.log("Listening..."));
