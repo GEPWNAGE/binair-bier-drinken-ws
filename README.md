@@ -77,8 +77,6 @@ START {p} {d}
 
 Where `{p}` is the number of players and `{d}` is the difficulty.
 
-TODO: see if we need an acknowledgement of the game being started by the screen.
-
 ### End of the game
 
 When a game is finished, the screen will send the following message to the
@@ -139,8 +137,6 @@ START {p} {d}
 ```
 
 Where `{p}` is the number of players and `{d}` is the difficulty.
-
-TODO: see if we need an acknowledgement of the game being started by the screen.
 
 ### End of the game
 
