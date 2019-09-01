@@ -1,3 +1,22 @@
+# Running
+
+To run, simply execute:
+
+``` sh
+yarn start
+```
+
+This will open port 5000. In production, this should be behind a reverse proxy
+like nginx, which forwards `/screen` and `/remote` to this server (with
+websocket support) and every other path to
+[binair-bier-drinken](https://github.com/GEPWNAGE/binair-bier-drinken/).
+
+In development, it is recommended to use this webserver as a proxy for the
+development server of
+[binair-bier-drinken](https://github.com/GEPWNAGE/binair-bier-drinken/). This
+can be accomplished by copying the `.env.dev` file to `.env`. Now you can use
+binair bier drinken on http://localhost:5000/.
+
 # Protocol specification
 
 Every message consists of a single command identifier (uppercase, with dashes,
