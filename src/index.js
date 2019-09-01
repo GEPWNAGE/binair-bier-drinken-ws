@@ -43,18 +43,18 @@ app.ws('/remote', (ws, req) => {
         switch (command[0]) {
             case 'IDENT':
                 if (command.length < 2) {
-                    ws.send('IDENT-FAIL');
+                    ws.send('IDENT-FAIL bad');
                     ws.terminate();
                     return;
                 }
                 ident = command[1];
                 if (!(ident in screens)) {
-                    ws.send('IDENT-FAIL');
+                    ws.send('IDENT-FAIL not-found');
                     ws.terminate();
                     return;
                 }
                 if (screens[ident].readyState != 1) {
-                    ws.send('IDENT-FAIL');
+                    ws.send('IDENT-FAIL screen-disconnected');
                     ws.terminate();
                     return;
                 }
@@ -62,6 +62,9 @@ app.ws('/remote', (ws, req) => {
                 screens[ident].send('REMOTE-CONNECTED');
                 remotes[ident] = ws;
                 ws.send('IDENT-SUCCESS');
+                break;
+            case 'PING':
+                ws.send('PONG');
                 break;
             case 'PLAYERS':
             case 'START':
@@ -72,7 +75,7 @@ app.ws('/remote', (ws, req) => {
 });
 
 app.ws('/screen', (ws, req) => {
-    const ident = generateIdent();
+    let ident = generateIdent();
     ws.on('message', msg => {
         const command = msg.split(' ');
         console.log("Screen", command);
@@ -82,10 +85,18 @@ app.ws('/screen', (ws, req) => {
                 screens[ident] = ws;
                 ws.send("IDENT " + ident);
                 break;
+            case 'SET-IDENT':
+                ident = command[1];
+                screens[ident] = ws;
+                ws.send("IDENT " + ident);
+                break;
             case 'FINISHED':
                 if (ident in remotes && remotes[ident].readyState == 1) {
                     remotes[ident].send(msg);
                 }
+                break;
+            case 'PING':
+                ws.send('PONG');
                 break;
         }
     });
