@@ -106,9 +106,16 @@ if (process.env.APP_ENV === 'development') {
     app.use('/', proxy('localhost:3000'));
 }
 if (process.env.APP_ENV === 'production') {
-    app.use('/', express.static(process.env.APP_DIR));
+    app.use('/', express.static(process.env.APP_DIR, {
+        // cache one day (maxAge is in ms, unlike in the cache-control header)
+        maxAge: 24*3600*1000
+    }));
 
-    app.get('/remote/:handle', (req, res) => res.sendFile(process.env.APP_DIR + "/index.html"));
+    app.get('/remote/:handle', (req, res) => {
+        // cache remote requests for one day as well (this is in seconds)
+        res.set('Cache-Control', 'public, max-age=' + (24*3600));
+        res.sendFile(process.env.APP_DIR + "/index.html")
+    });
 }
 
 app.listen(5000, () => console.log("Listening..."));
